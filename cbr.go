@@ -16,10 +16,11 @@ import (
 )
 
 var (
-	RU_URL string = "http://www.cbr.ru/scripts/XML_daily.asp"
-	EN_URL string = "http://www.cbr.ru/scripts/XML_daily_eng.asp"
+	ruUrl = "http://www.cbr.ru/scripts/XML_daily.asp"
+	enUrl = "http://www.cbr.ru/scripts/XML_daily_eng.asp"
 )
 
+// Currency is a struct for each individual data element. All fields are named according to XML fields names.
 type Currency struct {
 	ID       string `xml:",attr"`
 	NumCode  int
@@ -29,17 +30,19 @@ type Currency struct {
 	Value    float64
 }
 
+// CurrencyReport is top-level wrapper for the currencies itself. Date (as string) is the only useful field.
 type CurrencyReport struct {
 	Date       string     `xml:",attr"`
 	Currencies []Currency `xml:"Valute"`
 }
 
-func (self *CurrencyReport) DateAsTime() (date time.Time, err error) {
-	date, err = time.Parse("02.01.2006", self.Date)
+// DateAsTime returns Date as time.Time
+func (report *CurrencyReport) DateAsTime() (date time.Time, err error) {
+	date, err = time.Parse("02.01.2006", report.Date)
 	// try to parse again
 	// because date attribute format is different, fuck that
 	if err != nil {
-		date, err = time.Parse("02/01/2006", self.Date)
+		date, err = time.Parse("02/01/2006", report.Date)
 	}
 
 	return date, err
@@ -80,8 +83,9 @@ func getXML(URL string) (s string, err error) {
 	return string(b), err
 }
 
+// GetRuDaily returns today CurrencyReport, Russian locale
 func GetRuDaily() (report *CurrencyReport, err error) {
-	s, err := getXML(RU_URL)
+	s, err := getXML(ruUrl)
 	if err != nil {
 		return nil, err
 	}
@@ -96,8 +100,9 @@ func GetRuDaily() (report *CurrencyReport, err error) {
 	return decodeXMLBody(cleaned)
 }
 
+// GetEnDaily returns today CurrencyReport, English locale
 func GetEnDaily() (report *CurrencyReport, err error) {
-	s, err := getXML(EN_URL)
+	s, err := getXML(enUrl)
 	if err != nil {
 		return nil, err
 	}
@@ -107,8 +112,9 @@ func GetEnDaily() (report *CurrencyReport, err error) {
 	return decodeXMLBody(converted)
 }
 
+// GetRuDailyForDate returns CurrencyReport for the specified date, Russian locale
 func GetRuDailyForDate(date time.Time) (report *CurrencyReport, err error) {
-	s, err := getXML(RU_URL + "?date_req=" + date.Format("02/01/2006"))
+	s, err := getXML(ruUrl + "?date_req=" + date.Format("02/01/2006"))
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +129,9 @@ func GetRuDailyForDate(date time.Time) (report *CurrencyReport, err error) {
 	return decodeXMLBody(cleaned)
 }
 
+// GetEnDailyForDate returns CurrencyReport for the specified date, Russian locale
 func GetEnDailyForDate(date time.Time) (report *CurrencyReport, err error) {
-	s, err := getXML(EN_URL + "?date_req=" + date.Format("02/01/2006"))
+	s, err := getXML(enUrl + "?date_req=" + date.Format("02/01/2006"))
 	if err != nil {
 		return nil, err
 	}

@@ -30,7 +30,7 @@ func TestGetRuDaily(t *testing.T) {
 		fmt.Fprint(w, string(ru))
 	}))
 
-	RU_URL = ts.URL
+	ruUrl = ts.URL
 
 	report, err := GetRuDaily()
 	if err != nil {
@@ -74,7 +74,7 @@ func TestGetEnDaily(t *testing.T) {
 		fmt.Fprint(w, string(data))
 	}))
 
-	EN_URL = ts.URL
+	enUrl = ts.URL
 
 	report, err := GetEnDaily()
 	if err != nil {
@@ -118,7 +118,7 @@ func TestGetRuDailyForDate(t *testing.T) {
 		fmt.Fprint(w, string(ru))
 	}))
 
-	RU_URL = ts.URL
+	ruUrl = ts.URL
 
 	for_date := time.Date(2014, 2, 1, 0, 0, 0, 0, time.UTC)
 
@@ -164,7 +164,7 @@ func TestGetEnDailyForDate(t *testing.T) {
 		fmt.Fprint(w, string(data))
 	}))
 
-	EN_URL = ts.URL
+	enUrl = ts.URL
 
 	for_date := time.Date(2014, 2, 1, 0, 0, 0, 0, time.UTC)
 
