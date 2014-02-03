@@ -11,11 +11,6 @@ import (
 	"time"
 )
 
-const (
-	ruFile = "test_data/ru.xml"
-	enFile = "test_data/en.xml"
-)
-
 func TestGetRuDaily(t *testing.T) {
 	report, err := GetRuDaily()
 	if err != nil {
