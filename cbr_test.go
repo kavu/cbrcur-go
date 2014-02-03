@@ -16,12 +16,12 @@ import (
 )
 
 const (
-	RU_FILE = "test_data/ru.xml"
-	EN_FILE = "test_data/en.xml"
+	ruFile = "test_data/ru.xml"
+	enFile = "test_data/en.xml"
 )
 
 func TestGetRuDaily(t *testing.T) {
-	ru, err := ioutil.ReadFile(RU_FILE)
+	ru, err := ioutil.ReadFile(ruFile)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,7 +30,7 @@ func TestGetRuDaily(t *testing.T) {
 		fmt.Fprint(w, string(ru))
 	}))
 
-	ruUrl = ts.URL
+	ruURL = ts.URL
 
 	report, err := GetRuDaily()
 	if err != nil {
@@ -65,7 +65,7 @@ func TestGetRuDaily(t *testing.T) {
 }
 
 func TestGetEnDaily(t *testing.T) {
-	data, err := ioutil.ReadFile(EN_FILE)
+	data, err := ioutil.ReadFile(enFile)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -74,7 +74,7 @@ func TestGetEnDaily(t *testing.T) {
 		fmt.Fprint(w, string(data))
 	}))
 
-	enUrl = ts.URL
+	enURL = ts.URL
 
 	report, err := GetEnDaily()
 	if err != nil {
@@ -109,7 +109,7 @@ func TestGetEnDaily(t *testing.T) {
 }
 
 func TestGetRuDailyForDate(t *testing.T) {
-	ru, err := ioutil.ReadFile(RU_FILE)
+	ru, err := ioutil.ReadFile(ruFile)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -118,11 +118,11 @@ func TestGetRuDailyForDate(t *testing.T) {
 		fmt.Fprint(w, string(ru))
 	}))
 
-	ruUrl = ts.URL
+	ruURL = ts.URL
 
-	for_date := time.Date(2014, 2, 1, 0, 0, 0, 0, time.UTC)
+	forDate := time.Date(2014, 2, 1, 0, 0, 0, 0, time.UTC)
 
-	report, err := GetEnDailyForDate(for_date)
+	report, err := GetEnDailyForDate(forDate)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -155,7 +155,7 @@ func TestGetRuDailyForDate(t *testing.T) {
 }
 
 func TestGetEnDailyForDate(t *testing.T) {
-	data, err := ioutil.ReadFile(EN_FILE)
+	data, err := ioutil.ReadFile(enFile)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -164,11 +164,11 @@ func TestGetEnDailyForDate(t *testing.T) {
 		fmt.Fprint(w, string(data))
 	}))
 
-	enUrl = ts.URL
+	enURL = ts.URL
 
-	for_date := time.Date(2014, 2, 1, 0, 0, 0, 0, time.UTC)
+	forDate := time.Date(2014, 2, 1, 0, 0, 0, 0, time.UTC)
 
-	report, err := GetRuDailyForDate(for_date)
+	report, err := GetRuDailyForDate(forDate)
 	if err != nil {
 		t.Fatal(err)
 	}

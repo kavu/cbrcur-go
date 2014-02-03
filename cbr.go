@@ -16,8 +16,8 @@ import (
 )
 
 var (
-	ruUrl = "http://www.cbr.ru/scripts/XML_daily.asp"
-	enUrl = "http://www.cbr.ru/scripts/XML_daily_eng.asp"
+	ruURL = "http://www.cbr.ru/scripts/XML_daily.asp"
+	enURL = "http://www.cbr.ru/scripts/XML_daily_eng.asp"
 )
 
 // Currency is a struct for each individual data element. All fields are named according to XML fields names.
@@ -85,7 +85,7 @@ func getXML(URL string) (s string, err error) {
 
 // GetRuDaily returns today CurrencyReport, Russian locale
 func GetRuDaily() (report *CurrencyReport, err error) {
-	s, err := getXML(ruUrl)
+	s, err := getXML(ruURL)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func GetRuDaily() (report *CurrencyReport, err error) {
 
 // GetEnDaily returns today CurrencyReport, English locale
 func GetEnDaily() (report *CurrencyReport, err error) {
-	s, err := getXML(enUrl)
+	s, err := getXML(enURL)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +114,7 @@ func GetEnDaily() (report *CurrencyReport, err error) {
 
 // GetRuDailyForDate returns CurrencyReport for the specified date, Russian locale
 func GetRuDailyForDate(date time.Time) (report *CurrencyReport, err error) {
-	s, err := getXML(ruUrl + "?date_req=" + date.Format("02/01/2006"))
+	s, err := getXML(ruURL + "?date_req=" + date.Format("02/01/2006"))
 	if err != nil {
 		return nil, err
 	}
@@ -131,7 +131,7 @@ func GetRuDailyForDate(date time.Time) (report *CurrencyReport, err error) {
 
 // GetEnDailyForDate returns CurrencyReport for the specified date, Russian locale
 func GetEnDailyForDate(date time.Time) (report *CurrencyReport, err error) {
-	s, err := getXML(enUrl + "?date_req=" + date.Format("02/01/2006"))
+	s, err := getXML(enURL + "?date_req=" + date.Format("02/01/2006"))
 	if err != nil {
 		return nil, err
 	}
