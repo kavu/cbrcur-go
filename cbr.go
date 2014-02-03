@@ -20,6 +20,11 @@ const (
 	enURL = "http://www.cbr.ru/scripts/XML_daily_eng.asp"
 )
 
+var (
+	// HTTPClient is a customiziable HTTP Client, default is `http.DefaultClient`
+	HTTPClient = http.DefaultClient
+)
+
 // Currency is a struct for each individual data element. All fields are named according to the CBR's XML fields names.
 type Currency struct {
 	ID       string `xml:",attr"`
@@ -73,7 +78,7 @@ func decodeXMLBody(res string) (report *CurrencyReport, err error) {
 }
 
 func getXML(URL string) (s string, err error) {
-	res, err := http.Get(URL)
+	res, err := HTTPClient.Get(URL)
 	if err != nil {
 		return "", err
 	}
