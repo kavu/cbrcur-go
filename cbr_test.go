@@ -7,10 +7,6 @@
 package cbr
 
 import (
-	"fmt"
-	"io/ioutil"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 	"time"
 )
@@ -21,17 +17,6 @@ const (
 )
 
 func TestGetRuDaily(t *testing.T) {
-	ru, err := ioutil.ReadFile(ruFile)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, string(ru))
-	}))
-
-	ruURL = ts.URL
-
 	report, err := GetRuDaily()
 	if err != nil {
 		t.Fatal(err)
@@ -50,32 +35,23 @@ func TestGetRuDaily(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if date.Day() != 1 {
-		t.Errorf("Day Mismatch — got %d, 1 expected.", date.Day())
+	tomorrow := time.Now().Add(time.Hour * 24)
+
+	if date.Day() != tomorrow.Day() {
+		t.Errorf("Day Mismatch — got %d, %d expected.", date.Day(), tomorrow.Day())
 	}
 
-	if date.Month() != 2 {
-		t.Errorf("Month Mismatch — got %d, 2 expected.", date.Day())
+	if date.Month() != tomorrow.Month() {
+		t.Errorf("Month Mismatch — got %d, %d expected.", date.Month(), tomorrow.Month())
 
 	}
 
-	if date.Year() != 2014 {
-		t.Errorf("Year Mismatch — got %d, 2014 expected.", date.Day())
+	if date.Year() != tomorrow.Year() {
+		t.Errorf("Year Mismatch — got %d, %d expected.", date.Year(), tomorrow.Year())
 	}
 }
 
 func TestGetEnDaily(t *testing.T) {
-	data, err := ioutil.ReadFile(enFile)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, string(data))
-	}))
-
-	enURL = ts.URL
-
 	report, err := GetEnDaily()
 	if err != nil {
 		t.Fatal(err)
@@ -94,32 +70,23 @@ func TestGetEnDaily(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if date.Day() != 1 {
-		t.Errorf("Day Mismatch — got %d, 1 expected.", date.Day())
+	tomorrow := time.Now().Add(time.Hour * 24)
+
+	if date.Day() != tomorrow.Day() {
+		t.Errorf("Day Mismatch — got %d, %d expected.", date.Day(), tomorrow.Day())
 	}
 
-	if date.Month() != 2 {
-		t.Errorf("Month Mismatch — got %d, 2 expected.", date.Day())
+	if date.Month() != tomorrow.Month() {
+		t.Errorf("Month Mismatch — got %d, %d expected.", date.Month(), tomorrow.Month())
 
 	}
 
-	if date.Year() != 2014 {
-		t.Errorf("Year Mismatch — got %d, 2014 expected.", date.Day())
+	if date.Year() != tomorrow.Year() {
+		t.Errorf("Year Mismatch — got %d, %d expected.", date.Year(), tomorrow.Year())
 	}
 }
 
 func TestGetRuDailyForDate(t *testing.T) {
-	ru, err := ioutil.ReadFile(ruFile)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, string(ru))
-	}))
-
-	ruURL = ts.URL
-
 	forDate := time.Date(2014, 2, 1, 0, 0, 0, 0, time.UTC)
 
 	report, err := GetEnDailyForDate(forDate)
@@ -140,32 +107,21 @@ func TestGetRuDailyForDate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if date.Day() != 1 {
-		t.Errorf("Day Mismatch — got %d, 1 expected.", date.Day())
+	if date.Day() != forDate.Day() {
+		t.Errorf("Day Mismatch — got %d, %d expected.", date.Day(), forDate.Day())
 	}
 
-	if date.Month() != 2 {
-		t.Errorf("Month Mismatch — got %d, 2 expected.", date.Day())
+	if date.Month() != forDate.Month() {
+		t.Errorf("Month Mismatch — got %d, %d expected.", date.Day(), forDate.Month())
 
 	}
 
-	if date.Year() != 2014 {
-		t.Errorf("Year Mismatch — got %d, 2014 expected.", date.Day())
+	if date.Year() != forDate.Year() {
+		t.Errorf("Year Mismatch — got %d, %d expected.", date.Day(), forDate.Year())
 	}
 }
 
 func TestGetEnDailyForDate(t *testing.T) {
-	data, err := ioutil.ReadFile(enFile)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, string(data))
-	}))
-
-	enURL = ts.URL
-
 	forDate := time.Date(2014, 2, 1, 0, 0, 0, 0, time.UTC)
 
 	report, err := GetRuDailyForDate(forDate)
@@ -186,16 +142,16 @@ func TestGetEnDailyForDate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if date.Day() != 1 {
-		t.Errorf("Day Mismatch — got %d, 1 expected.", date.Day())
+	if date.Day() != forDate.Day() {
+		t.Errorf("Day Mismatch — got %d, %d expected.", date.Day(), forDate.Day())
 	}
 
-	if date.Month() != 2 {
-		t.Errorf("Month Mismatch — got %d, 2 expected.", date.Day())
+	if date.Month() != forDate.Month() {
+		t.Errorf("Month Mismatch — got %d, %d expected.", date.Day(), forDate.Month())
 
 	}
 
-	if date.Year() != 2014 {
-		t.Errorf("Year Mismatch — got %d, 2014 expected.", date.Day())
+	if date.Year() != forDate.Year() {
+		t.Errorf("Year Mismatch — got %d, %d expected.", date.Day(), forDate.Year())
 	}
 }

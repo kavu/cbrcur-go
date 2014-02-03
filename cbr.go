@@ -15,12 +15,12 @@ import (
 	"time"
 )
 
-var (
+const (
 	ruURL = "http://www.cbr.ru/scripts/XML_daily.asp"
 	enURL = "http://www.cbr.ru/scripts/XML_daily_eng.asp"
 )
 
-// Currency is a struct for each individual data element. All fields are named according to XML fields names.
+// Currency is a struct for each individual data element. All fields are named according to the CBR's XML fields names.
 type Currency struct {
 	ID       string `xml:",attr"`
 	NumCode  int
@@ -58,7 +58,12 @@ func convertXML(res string) (string, error) {
 }
 
 func decodeXMLBody(res string) (report *CurrencyReport, err error) {
-	reader := strings.NewReader(strings.Replace(res, `,`, `.`, -1))
+	// I want Clojure -> macro so hard
+	s := strings.Replace(res, ` encoding="windows-1251"`, "", -1)
+	s = strings.Replace(s, ` encoding="windows-1252"`, "", -1)
+	s = strings.Replace(s, `,`, `.`, -1)
+
+	reader := strings.NewReader(s)
 
 	if err := xml.NewDecoder(reader).Decode(&report); err != nil {
 		return nil, err
@@ -95,9 +100,7 @@ func GetRuDaily() (report *CurrencyReport, err error) {
 		return nil, err
 	}
 
-	cleaned := strings.Replace(converted, ` encoding="windows-1251"`, ` encoding="utf-8"`, -1)
-
-	return decodeXMLBody(cleaned)
+	return decodeXMLBody(converted)
 }
 
 // GetEnDaily returns today CurrencyReport, English locale
@@ -107,9 +110,7 @@ func GetEnDaily() (report *CurrencyReport, err error) {
 		return nil, err
 	}
 
-	converted := strings.Replace(s, ` encoding="windows-1252"`, ` encoding="utf-8"`, -1)
-
-	return decodeXMLBody(converted)
+	return decodeXMLBody(s)
 }
 
 // GetRuDailyForDate returns CurrencyReport for the specified date, Russian locale
@@ -124,9 +125,7 @@ func GetRuDailyForDate(date time.Time) (report *CurrencyReport, err error) {
 		return nil, err
 	}
 
-	cleaned := strings.Replace(converted, ` encoding="windows-1251"`, ` encoding="utf-8"`, -1)
-
-	return decodeXMLBody(cleaned)
+	return decodeXMLBody(converted)
 }
 
 // GetEnDailyForDate returns CurrencyReport for the specified date, Russian locale
@@ -136,7 +135,5 @@ func GetEnDailyForDate(date time.Time) (report *CurrencyReport, err error) {
 		return nil, err
 	}
 
-	converted := strings.Replace(s, ` encoding="windows-1252"`, ` encoding="utf-8"`, -1)
-
-	return decodeXMLBody(converted)
+	return decodeXMLBody(s)
 }
